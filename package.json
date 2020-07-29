@@ -10,9 +10,18 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "date-fns": "^2.15.0",
+    "plotly.js-basic-dist-min": "^1.54.7",
+    "plotly.js-cartesian-dist": "^1.54.7",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-plotly.js": "^2.4.0",
+    "react-redux": "^7.2.1",
     "react-scripts": "3.4.1",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^1.0.0",
     "typescript": "~3.7.2"
   },
   "scripts": {
@@ -35,5 +44,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-plotly.js": "^2.2.4",
+    "@types/react-redux": "^7.1.9"
   }
 }

@@ -1,26 +1,75 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import { connect } from "react-redux";
+import { Dimmer, Loader } from "semantic-ui-react";
+import "./App.css";
+import Chart, { CovidRecord } from "./components/Chart";
+import DataTable from "./components/DataTable";
+import DateIntervalSelector from "./components/DateInvervalSelector";
+import StatesSelector from "./components/StatesSelector";
+import { fetchCountryData, fetchDataByDate } from "./redux/actions";
 
-function App() {
+type AppProps = {
+  filteredData: CovidRecord[];
+  dataset: CovidRecord[];
+  fetchCountryData: () => void;
+  fetchDataByDate: (date: string) => void;
+  loading: boolean;
+};
+
+function App(props: AppProps) {
+  const {
+    filteredData,
+    dataset,
+    loading,
+    fetchCountryData,
+    fetchDataByDate,
+  } = props;
+
+  React.useEffect(() => {
+    if (!dataset.length) {
+      fetchCountryData();
+    }
+  }, [dataset, fetchCountryData]);
+
+  const renderChart = () => {
+    if (loading)
+      return (
+        <Dimmer active inverted>
+          <Loader inverted content="Loading" />
+        </Dimmer>
+      );
+
+    const chartData = filteredData.length ? filteredData : dataset;
+
+    return <Chart chartData={chartData} onSelect={fetchDataByDate}></Chart>;
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="top-bar">
+        <DateIntervalSelector />
+        <StatesSelector />
+      </div>
+      <div className="chart-wrapper">
+        {renderChart()}
+        <DataTable />
+      </div>
+      <footer>
+        Data source: The Covid Tracking Project https://covidtracking.com/
+      </footer>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = (state: Record<string, any>) => {
+  return {
+    dataset: state.country.dataset,
+    filteredData: state.country.filteredDataset,
+    loading: state.country.loading,
+  };
+};
+
+export default connect(mapStateToProps, {
+  fetchCountryData,
+  fetchDataByDate,
+})(App);
